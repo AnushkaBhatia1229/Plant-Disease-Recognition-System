@@ -225,12 +225,10 @@ Disease Information Display
 
 ## 📤 Upload Image
 
-> Save the screenshot as:
+> Save the screenshot as:<img width="1920" height="1200" alt="Screenshot (1388)" src="https://github.com/user-attachments/assets/1580ec89-01eb-463a-9a19-6c8e228c091e" />
 
-```
-<img width="1920" height="1200" alt="image" src="https://github.com/user-attachments/assets/d25021ab-0ba6-4271-a28f-c6f29132bd90" />
 
-```
+
 
 <img src="screenshots/upload.png" width="900">
 
@@ -238,12 +236,8 @@ Disease Information Display
 
 ## 🌿 Prediction Result
 
-> Save the screenshot as:
-
-```
-<img width="1920" height="1200" alt="Screenshot (1378)" src="https://github.com/user-attachments/assets/0a7ee89c-111b-481e-b5fb-c869126b9181" />
-
-```
+> Save the screenshot as:<img width="1920" height="1200" alt="Screenshot (1378)" src="https://github.com/user-attachments/assets/9047c397-3855-4ef2-9b71-74a3bfacfbb3" />
+<img width="1920" height="1200" alt="Screenshot (1381)" src="https://github.com/user-attachments/assets/feda7776-a5d0-42ad-9bd6-d6370230adda" />
 
 <img src="screenshots/prediction.png" width="900">
 
@@ -251,13 +245,8 @@ Disease Information Display
 
 ## 🤖 Disease Information
 
-> Save the screenshot as:
+> Save the screenshot as:<img width="1920" height="1200" alt="Screenshot (1380)" src="https://github.com/user-attachments/assets/c8873c5f-c91c-4f4e-9839-ebc7eeec4bf7" />
 
-```
-<img width="1920" height="1200" alt="Screenshot (1381)" src="https://github.com/user-attachments/assets/e2f2034e-8d61-47f8-9254-604495f866ba" />
-<img width="1920" height="1200" alt="Screenshot (1380)" src="https://github.com/user-attachments/assets/31d452b6-d25f-4751-b881-50f1198de0c6" />
-
-```
 
 <img src="screenshots/result2.png" width="900">
 
