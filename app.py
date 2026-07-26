@@ -4,22 +4,49 @@ import json
 import uuid
 import os
 import tensorflow as tf
+import gdown
 
 app = Flask(__name__)
 
-# Load trained model
+# ============================
+# Download AI Model (Only Once)
+# ============================
+
+MODEL_PATH = "plant_disease_recog_model_pwp.keras"
+
+if not os.path.exists(MODEL_PATH):
+    print("Downloading AI model from Google Drive...")
+    gdown.download(
+        id="14BUv71OaCFl4_b0ypL1rdob-zM_Cuwjd",
+        output=MODEL_PATH,
+        quiet=False
+    )
+
+print("Loading AI model...")
 model = tf.keras.models.load_model(
-    "plant_disease_recog_model_pwp.keras",
+    MODEL_PATH,
     compile=False
 )
 
-# Load disease information
+print("Model Loaded Successfully!")
+
+# ============================
+# Load Disease Labels
+# ============================
+
 with open("plant_disease.json", "r") as file:
     plant_disease = json.load(file)
+
+# ============================
+# Upload Folder
+# ============================
 
 UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+# ============================
+# Routes
+# ============================
 
 @app.route("/uploads/<path:filename>")
 def uploaded_images(filename):
@@ -30,6 +57,9 @@ def uploaded_images(filename):
 def home():
     return render_template("home.html")
 
+# ============================
+# Image Processing
+# ============================
 
 def extract_features(image_path):
     image = tf.keras.utils.load_img(image_path, target_size=(160, 160))
@@ -44,6 +74,9 @@ def model_predict(image_path):
     prediction_label = plant_disease[np.argmax(prediction)]
     return prediction_label
 
+# ============================
+# Upload Image
+# ============================
 
 @app.route("/upload/", methods=["POST"])
 def uploadimage():
@@ -64,12 +97,15 @@ def uploadimage():
     prediction = model_predict(filepath)
 
     return render_template(
-    "home.html",
-    result=True,
-    imagepath=f"/uploads/{filename}",
-    prediction=prediction
-)
+        "home.html",
+        result=True,
+        imagepath=f"/uploads/{filename}",
+        prediction=prediction
+    )
 
+# ============================
+# Run Flask
+# ============================
 
 if __name__ == "__main__":
     app.run(debug=True)
