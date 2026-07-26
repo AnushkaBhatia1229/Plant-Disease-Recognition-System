@@ -211,10 +211,11 @@ Disease Information Display
 
 ## 🏠 Home Page
 
-> Save the screenshot as:
+> Save the screenshot as:<img width="1920" height="1200" alt="Screenshot (1379)" src="https://github.com/user-attachments/assets/8eb2ef1c-49a9-4bd0-beed-2072720f0ed9" />
+
 
 ```
-<img width="1920" height="1200" alt="Screenshot (1379)" src="https://github.com/user-attachments/assets/062e2532-bf89-46ee-98af-8453e815167c" />
+
 
 ```
 
