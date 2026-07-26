@@ -50,20 +50,22 @@ app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 MODEL_PATH = "plant_disease_model.keras"
 
 
-if not os.path.exists(MODEL_PATH):
+if not os.path.exists(MODEL_PATH) or os.path.getsize(MODEL_PATH) < 1000000:
 
-    print("Downloading model...")
+    print("Downloading model from Google Drive...")
 
     gdown.download(
-        id="14BUv71OaCFl4_b0ypL1rdob-zM_Cuwjd",
-        output=MODEL_PATH,
-        quiet=False
+        "https://drive.google.com/uc?id=14BUv71OaCFl4_b0ypL1rdob-zM_Cuwjd",
+        MODEL_PATH,
+        quiet=False,
+        fuzzy=True
     )
 
 
-print("Model file ready")
-
-
+print(
+    "Model size:",
+    os.path.getsize(MODEL_PATH)
+)
 
 # ==============================
 # Lazy Model Loading
