@@ -15,9 +15,9 @@ import gdown
 app = Flask(__name__)
 
 
-# =====================================
-# TensorFlow Memory Optimization
-# =====================================
+# ==============================
+# TensorFlow CPU Only
+# ==============================
 
 try:
     tf.config.set_visible_devices([], "GPU")
@@ -25,9 +25,10 @@ except:
     pass
 
 
-# =====================================
+
+# ==============================
 # Upload Configuration
-# =====================================
+# ==============================
 
 UPLOAD_FOLDER = "uploads"
 
@@ -36,21 +37,22 @@ os.makedirs(
     exist_ok=True
 )
 
+
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 app.config["MAX_CONTENT_LENGTH"] = 10 * 1024 * 1024
 
 
 
-# =====================================
+# ==============================
 # Model Download
-# =====================================
+# ==============================
 
 MODEL_PATH = "plant_disease_model.keras"
 
 
 if not os.path.exists(MODEL_PATH):
 
-    print("Downloading AI Model...")
+    print("Downloading model...")
 
     gdown.download(
         id="14BUv71OaCFl4_b0ypL1rdob-zM_Cuwjd",
@@ -63,25 +65,27 @@ print("Model file ready")
 
 
 
-# =====================================
+# ==============================
 # Lazy Model Loading
-# =====================================
+# ==============================
 
 model = None
 
 
-def load_model_once():
+def get_model():
 
     global model
 
+
     if model is None:
 
-        print("Loading TensorFlow model...")
+        print("Loading model...")
 
         model = tf.keras.models.load_model(
             MODEL_PATH,
             compile=False
         )
+
 
         print("Model Loaded Successfully")
 
@@ -90,9 +94,9 @@ def load_model_once():
 
 
 
-# =====================================
-# Disease Labels
-# =====================================
+# ==============================
+# Load Labels
+# ==============================
 
 with open(
     "plant_disease.json",
@@ -103,9 +107,9 @@ with open(
 
 
 
-# =====================================
+# ==============================
 # Routes
-# =====================================
+# ==============================
 
 
 @app.route("/uploads/<path:filename>")
@@ -127,9 +131,9 @@ def home():
 
 
 
-# =====================================
+# ==============================
 # Image Processing
-# =====================================
+# ==============================
 
 
 def extract_features(image_path):
@@ -145,6 +149,10 @@ def extract_features(image_path):
     )
 
 
+    # normalization
+    image = image / 255.0
+
+
     image = np.expand_dims(
         image,
         axis=0
@@ -156,45 +164,73 @@ def extract_features(image_path):
 
 
 
+# ==============================
+# Prediction
+# ==============================
+
+
 def model_predict(image_path):
 
-    model = load_model_once()
+    try:
+
+        model = get_model()
 
 
-    img = extract_features(
-        image_path
-    )
+        img = extract_features(
+            image_path
+        )
 
 
-    prediction = model.predict(
-        img,
-        verbose=0
-    )
+        prediction = model.predict(
+            img,
+            verbose=0
+        )
 
 
-    index = np.argmax(
-        prediction
-    )
+        index = int(
+            np.argmax(prediction)
+        )
 
 
-    result = plant_disease[index]
+        # Handle JSON list/dict both
+
+        if isinstance(plant_disease, list):
+
+            result = plant_disease[index]
 
 
-    # Free memory
-    del img
-    del prediction
+        else:
 
-    gc.collect()
-
-
-    return result
+            result = plant_disease.get(
+                str(index),
+                "Unknown Disease"
+            )
 
 
+        del img
+        del prediction
+
+        gc.collect()
 
 
-# =====================================
-# Upload Prediction
-# =====================================
+        return result
+
+
+
+    except Exception as e:
+
+        print(
+            "Prediction Error:",
+            e
+        )
+
+        return "Unable to predict disease"
+
+
+
+# ==============================
+# Upload Route
+# ==============================
 
 
 @app.route(
@@ -212,7 +248,6 @@ def uploadimage():
 
 
     image = request.files["img"]
-
 
 
     if image.filename == "":
@@ -251,9 +286,10 @@ def uploadimage():
 
 
 
-# =====================================
-# Run
-# =====================================
+# ==============================
+# Run Server
+# ==============================
+
 
 if __name__ == "__main__":
 
